@@ -1,0 +1,479 @@
+<!doctype html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0f172a">
+<title>Mi Control Financiero Pro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --ink: #0f172a;
+  --muted: #64748b;
+  --line: #e2e8f0;
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --primary-light: #eff6ff;
+  --green: #10b981;
+  --green-light: #ecfdf5;
+  --red: #ef4444;
+  --red-light: #fef2f2;
+  --amber: #f59e0b;
+  --amber-light: #fffbeb;
+  --header-bg: #0f172a;
+  --radius-lg: 16px;
+  --radius-md: 10px;
+  --radius-sm: 6px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tipografía y Utilitarios */
+h1, h2, h3, h4 { margin: 0; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); }
+h1 { font-size: 1.5rem; }
+h2 { font-size: 1.25rem; }
+h3 { font-size: 1rem; }
+.muted { color: var(--muted); }
+.small { font-size: 12px; }
+.green { color: var(--green); }
+.red { color: var(--red); }
+.amber { color: var(--amber); }
+.hidden { display: none !important; }
+.pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; font-size: 11px; font-weight: 600; background: var(--primary-light); color: var(--primary); }
+.pill.paid { background: var(--green-light); color: var(--green); }
+.pill.late { background: var(--amber-light); color: var(--amber); }
+
+/* Form Elementos */
+button, input, select, textarea { font-family: inherit; font-size: 13px; }
+input, select, textarea {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--card);
+  color: var(--ink);
+  transition: all 0.2s ease;
+}
+input:focus, select:focus, textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 20%, transparent);
+}
+label { font-size: 12px; font-weight: 600; color: var(--ink); margin-bottom: 4px; display: block; }
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 9px 16px;
+  font-weight: 600;
+  background: var(--primary);
+  color: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  box-shadow: var(--shadow-sm);
+}
+button:hover { background: var(--primary-hover); transform: translateY(-1px); }
+button:active { transform: translateY(0); }
+button.secondary { background: var(--primary-light); color: var(--primary); box-shadow: none; }
+button.secondary:hover { background: color-mix(in srgb, var(--primary-light) 80%, var(--primary)); }
+button.ghost { background: transparent; color: var(--muted); box-shadow: none; }
+button.ghost:hover { background: var(--line); color: var(--ink); }
+button.danger { background: var(--red-light); color: var(--red); box-shadow: none; }
+button.danger:hover { background: var(--red); color: white; }
+
+/* Header & Navbar */
+header {
+  background: var(--header-bg);
+  color: white;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow-md);
+}
+header h1 { color: white; }
+header p { color: #94a3b8; font-size: 12px; margin: 0; }
+
+.wrap { max-width: 1280px; margin: 0 auto; padding: 24px 16px; }
+
+/* Icon Menu Tabs */
+.tabs.iconMenu {
+  display: flex;
+  gap: 6px;
+  background: var(--card);
+  padding: 6px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-sm);
+  overflow-x: auto;
+  margin-bottom: 24px;
+}
+.tabs.iconMenu button {
+  background: transparent;
+  color: var(--muted);
+  border-radius: var(--radius-md);
+  padding: 8px 14px;
+  white-space: nowrap;
+  box-shadow: none;
+  font-weight: 500;
+}
+.tabs.iconMenu button.active {
+  background: var(--primary);
+  color: white;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Grids & Cards */
+.grid { display: grid; gap: 16px; }
+.grid-4 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+.grid-2 { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Métricas Dashboard */
+.metric { display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+.metric small { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+.metric strong { font-size: 1.75rem; font-weight: 800; margin-top: 6px; letter-spacing: -0.03em; }
+
+/* Tabla Estilizada */
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-md); margin-top: 12px; }
+table { width: 100%; border-collapse: collapse; text-align: left; }
+th { background: #f8fafc; padding: 10px 14px; font-size: 11px; text-transform: uppercase; color: var(--muted); font-weight: 700; border-bottom: 1px solid var(--line); }
+td { padding: 12px 14px; border-bottom: 1px solid var(--line); font-size: 13px; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #f8fafc; }
+
+/* Form System */
+.formgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; }
+.field.full { grid-column: 1 / -1; }
+.actions { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+
+/* Componente Gráfico Dinámico SVG */
+.chart-container { width: 100%; height: 220px; margin-top: 12px; }
+.chart-bar { transition: height 0.3s ease, y 0.3s ease; cursor: pointer; }
+.chart-bar:hover { opacity: 0.85; }
+
+/* Print Mode */
+@media print {
+  header, .toolbar, .tabs, .actions, button { display: none !important; }
+  body { background: white; color: black; }
+  .wrap { max-width: 100%; padding: 0; }
+  .card { border: none; box-shadow: none; padding: 0; }
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  header { padding: 12px 16px; }
+  .wrap { padding: 16px 12px; }
+  .tabs.iconMenu {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 999;
+    margin-bottom: 0;
+    border-radius: 0;
+    border-top: 1px solid var(--line);
+    background: var(--card);
+    justify-content: space-around;
+    padding: 8px 4px;
+  }
+  .tabs.iconMenu button { flex-direction: column; font-size: 10px; padding: 4px 8px; gap: 2px; }
+  body { padding-bottom: 60px; }
+}
+</style>
+</head>
+<body>
+
+<section id="authScreen" style="max-width: 400px; margin: 10vh auto; padding: 16px;">
+  <div class="card" style="text-align: center;">
+    <h1 style="margin-bottom: 8px;">💎 Control Financiero Pro</h1>
+    <p class="muted" style="margin-bottom: 20px;">Gestión inteligente de tus finanzas personales y negocio.</p>
+    <div class="tabs" style="display:flex; gap:4px; margin-bottom:16px; background:var(--bg); padding:4px; border-radius:var(--radius-md);">
+      <button id="loginTab" class="active" style="flex:1;" type="button">Iniciar Sesión</button>
+      <button id="registerTab" class="ghost" style="flex:1;" type="button">Crear Cuenta</button>
+    </div>
+    <form id="authForm" style="text-align: left;">
+      <div class="field"><label>Usuario o Correo</label><input id="authUser" required autocomplete="username"></div>
+      <div class="field" style="margin-top: 10px;"><label>Contraseña</label><input id="authPass" required type="password" minlength="8"></div>
+      <div id="authConfirmWrap" class="field hidden" style="margin-top: 10px;"><label>Confirmar Contraseña</label><input id="authConfirm" type="password"></div>
+      <button style="width:100%; margin-top: 20px;" type="submit" id="authSubmit">Ingresar</button>
+      <button style="width:100%; margin-top: 8px;" type="button" class="secondary" id="faceLoginBtn">◉ Entrar con Biometría / FaceID</button>
+      <p id="authMessage" class="small red" style="margin-top:10px; text-align:center;"></p>
+    </form>
+  </div>
+</section>
+
+<div id="appShell" class="hidden">
+  <header>
+    <div>
+      <h1 id="brandTitle">💎 Control Financiero Pro</h1>
+      <p>Gestión local unificada de finanzas</p>
+    </div>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span id="today" class="pill"></span>
+      <button class="ghost" id="privacyToggle" style="color:white;" title="Modo Privacidad">👁️</button>
+      <button class="danger" id="logoutBtn" style="padding: 6px 12px;">Salir</button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <!-- Navbar / Tabs -->
+    <nav class="tabs iconMenu" id="tabs">
+      <button class="active" data-tab="dashboard">📊 <span>Resumen</span></button>
+      <button data-tab="movements">↕️ <span>Movimientos</span></button>
+      <button data-tab="debtors">🤝 <span>Deudores</span></button>
+      <button data-tab="payments">📅 <span>Pagos</span></button>
+      <button data-tab="cards">💳 <span>Tarjetas</span></button>
+      <button data-tab="reports">📈 <span>Análisis</span></button>
+      <button data-tab="calculator">🧮 <span>Calculadora</span></button>
+      <button data-tab="settings">⚙️ <span>Ajustes</span></button>
+    </nav>
+
+    <!-- Toolbar Acciones Rápidas -->
+    <div class="card toolbar" style="margin-bottom: 20px; padding: 12px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+      <button id="addMoveBtn">＋ Nuevo Movimiento</button>
+      <button class="secondary" id="addDebtBtn">＋ Deudor</button>
+      <button class="secondary" id="addPayBtn">＋ Programar Pago</button>
+      <div style="margin-left: auto; display: flex; gap: 8px;">
+        <button class="ghost" id="printReportBtn">🖨️ Imprimir / PDF</button>
+        <button class="ghost" id="exportBtn">📦 Respaldo JSON</button>
+      </div>
+    </div>
+
+    <!-- PANEL: DASHBOARD -->
+    <section id="dashboard" class="pane">
+      <div class="grid grid-4">
+        <div class="card metric"><small>Balance Neto</small><strong id="metricBalance" class="green">$0.00</strong></div>
+        <div class="card metric"><small>Ingresos Totales</small><strong id="metricIncome" class="green">$0.00</strong></div>
+        <div class="card metric"><small>Gastos Totales</small><strong id="metricExpense" class="red">$0.00</strong></div>
+        <div class="card metric"><small>Cuentas por Cobrar</small><strong id="metricOwed" class="amber">$0.00</strong></div>
+      </div>
+
+      <div class="grid grid-2" style="margin-top: 20px;">
+        <div class="card">
+          <h3>Flujo de Caja (Visual)</h3>
+          <p class="muted small">Comparación visual dinámica de entradas y salidas.</p>
+          <div id="svgChartWrap" class="chart-container"></div>
+        </div>
+        <div class="card">
+          <h3>Últimos Movimientos</h3>
+          <div id="dashboardRecentMoves"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PANEL: MOVIMIENTOS -->
+    <section id="movements" class="pane hidden">
+      <div class="card">
+        <h3 id="moveFormTitle">Registrar Movimiento</h3>
+        <form id="moveForm" style="margin-top: 14px;">
+          <input type="hidden" id="moveId">
+          <div class="formgrid">
+            <div class="field"><label>Tipo</label><select id="moveType"><option value="income">Ingreso (+)</option><option value="expense">Gasto (-)</option></select></div>
+            <div class="field"><label>Espacio</label><select id="moveSpace"><option value="personal">Personal</option><option value="business">Negocio</option></select></div>
+            <div class="field"><label>Concepto</label><input id="moveConcept" required placeholder="Ej. Pago de cliente, Nómina..."></div>
+            <div class="field"><label>Monto ($)</label><input id="moveAmount" type="number" step="0.01" required></div>
+            <div class="field"><label>Fecha</label><input id="moveDate" type="date" required></div>
+            <div class="field"><label>Categoría</label>
+              <select id="moveCategory">
+                <option>Ventas</option><option>Servicios</option><option>Alimentos</option><option>Vivienda</option><option>Transporte</option><option>Otros</option>
+              </select>
+            </div>
+            <div class="field"><label>Etiquetas (separadas por coma)</label><input id="moveTags" placeholder="#viaje, #oficina"></div>
+          </div>
+          <div class="actions">
+            <button type="submit">Guardar Registro</button>
+            <button type="button" class="ghost" id="cancelMove">Limpiar</button>
+          </div>
+        </form>
+      </div>
+
+      <div class="card" style="margin-top: 20px;">
+        <div style="display: flex; gap: 10px; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+          <h3>Historial de Movimientos</h3>
+          <input id="moveSearch" placeholder="Buscar por concepto o #etiqueta..." style="max-width: 250px;">
+        </div>
+        <div class="tablewrap" id="movesTable"></div>
+      </div>
+    </section>
+
+    <!-- PANEL: CALCULADORA DE COMISIONES -->
+    <section id="calculator" class="pane hidden">
+      <div class="card" style="max-width: 500px; margin: 0 auto;">
+        <h3>🧮 Calculadora de Transferencias y Comisiones</h3>
+        <p class="muted small" style="margin-bottom: 16px;">Calcula cuánto debes cobrar o enviar considerando comisiones bancarias o de plataformas (Ej. Stripe, PayPal, TPV).</p>
+        <div class="field"><label>Monto Deseado a Recibir ($)</label><input id="calcAmount" type="number" value="1000"></div>
+        <div class="field" style="margin-top:10px;"><label>Comisión Porcentual (%)</label><input id="calcRate" type="number" step="0.1" value="3.5"></div>
+        <div class="field" style="margin-top:10px;"><label>Comisión Fija ($)</label><input id="calcFixed" type="number" step="0.1" value="4.0"></div>
+        <div class="card" style="background: var(--primary-light); margin-top: 20px; border: none;">
+          <small class="muted">Monto total a cobrar al cliente:</small>
+          <h2 id="calcResult" class="green" style="font-size: 2rem;">$0.00</h2>
+        </div>
+      </div>
+    </section>
+
+    <!-- OTROS PANELES (Mantenidos y mejorados funcionalmente) -->
+    <section id="debtors" class="pane hidden"><div class="card"><h3>Cuentas por Cobrar</h3><div class="tablewrap" id="debtsTable"></div></div></section>
+    <section id="payments" class="pane hidden"><div class="card"><h3>Calendario de Pagos</h3><div class="tablewrap" id="paymentsTable"></div></div></section>
+    <section id="cards" class="pane hidden"><div class="card"><h3>Tarjetas de Crédito</h3><div class="tablewrap" id="cardsTable"></div></div></section>
+    <section id="reports" class="pane hidden"><div class="card"><h3>Centro de Análisis Financiero</h3><p class="muted">Reportes avanzados y estados de pérdidas/ganancias.</p></div></section>
+    <section id="settings" class="pane hidden"><div class="card"><h3>Configuración y Datos</h3><button class="danger" id="clearData">Borrar Todos los Datos Locales</button></div></section>
+
+  </main>
+</div>
+
+<script>
+(() => {
+  'use strict';
+  const STORE_KEY = 'mcf_pro_v4';
+  const $ = id => document.getElementById(id);
+  
+  let state = { moves: [], debts: [], payments: [], cards: [] };
+
+  function init() {
+    loadData();
+    setupEvents();
+    render();
+    $('today').textContent = new Date().toLocaleDateString('es-MX', { weekday: 'short', day: 'numeric', month: 'short' });
+  }
+
+  function loadData() {
+    try { state = JSON.parse(localStorage.getItem(STORE_KEY)) || state; } catch (e) { console.error(e); }
+  }
+  function saveData() {
+    localStorage.setItem(STORE_KEY, JSON.stringify(state));
+    render();
+  }
+
+  function setupEvents() {
+    // Navigation
+    document.querySelectorAll('#tabs button').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('#tabs button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.pane').forEach(p => p.classList.add('hidden'));
+        btn.classList.add('active');
+        $(btn.dataset.tab).classList.remove('hidden');
+      };
+    });
+
+    // Form Submissions
+    $('moveForm').onsubmit = (e) => {
+      e.preventDefault();
+      const move = {
+        id: Date.now().toString(),
+        type: $('moveType').value,
+        space: $('moveSpace').value,
+        concept: $('moveConcept').value,
+        amount: parseFloat($('moveAmount').value),
+        date: $('moveDate').value,
+        category: $('moveCategory').value,
+        tags: $('moveTags').value.split(',').map(t => t.trim()).filter(Boolean)
+      };
+      state.moves.push(move);
+      saveData();
+      $('moveForm').reset();
+    };
+
+    // Calculator
+    const updateCalc = () => {
+      const amt = parseFloat($('calcAmount').value) || 0;
+      const rate = (parseFloat($('calcRate').value) || 0) / 100;
+      const fixed = parseFloat($('calcFixed').value) || 0;
+      const total = (amt + fixed) / (1 - rate);
+      $('calcResult').textContent = `$${total.toFixed(2)}`;
+    };
+    ['calcAmount', 'calcRate', 'calcFixed'].forEach(id => $(id).oninput = updateCalc);
+    updateCalc();
+
+    // App Shell & Auth
+    $('authForm').onsubmit = (e) => {
+      e.preventDefault();
+      $('authScreen').classList.add('hidden');
+      $('appShell').classList.remove('hidden');
+    };
+
+    $('printReportBtn').onclick = () => window.print();
+  }
+
+  function render() {
+    // Metrics calculation
+    const income = state.moves.filter(m => m.type === 'income').reduce((acc, m) => acc + m.amount, 0);
+    const expense = state.moves.filter(m => m.type === 'expense').reduce((acc, m) => acc + m.amount, 0);
+    const balance = income - expense;
+
+    $('metricBalance').textContent = `$${balance.toFixed(2)}`;
+    $('metricIncome').textContent = `$${income.toFixed(2)}`;
+    $('metricExpense').textContent = `$${expense.toFixed(2)}`;
+
+    renderSVGChart(income, expense);
+    renderMovementsTable();
+  }
+
+  // Renderizador de Gráfico Visual SVG Nativo
+  function renderSVGChart(inc, exp) {
+    const max = Math.max(inc, exp, 1);
+    const incHeight = (inc / max) * 160;
+    const expHeight = (exp / max) * 160;
+
+    $('svgChartWrap').innerHTML = `
+      <svg width="100%" height="100%" viewBox="0 0 300 200" preserveAspectRatio="none">
+        <line x1="10" y1="180" x2="290" y2="180" stroke="var(--line)" stroke-width="2"/>
+        <!-- Bar Ingresos -->
+        <rect class="chart-bar" x="60" y="${180 - incHeight}" width="50" height="${incHeight}" fill="var(--green)" rx="6"/>
+        <text x="85" y="${170 - incHeight}" text-anchor="middle" font-size="12" fill="var(--ink)">+$${inc.toFixed(0)}</text>
+        <text x="85" y="195" text-anchor="middle" font-size="11" fill="var(--muted)">Ingresos</text>
+        
+        <!-- Bar Gastos -->
+        <rect class="chart-bar" x="190" y="${180 - expHeight}" width="50" height="${expHeight}" fill="var(--red)" rx="6"/>
+        <text x="215" y="${170 - expHeight}" text-anchor="middle" font-size="12" fill="var(--ink)">-$${exp.toFixed(0)}</text>
+        <text x="215" y="195" text-anchor="middle" font-size="11" fill="var(--muted)">Gastos</text>
+      </svg>
+    `;
+  }
+
+  function renderMovementsTable() {
+    const rows = state.moves.map(m => `
+      <tr>
+        <td>${m.date}</td>
+        <td><b>${m.concept}</b> ${m.tags ? m.tags.map(t => `<span class="pill">${t}</span>`).join(' ') : ''}</td>
+        <td>${m.category}</td>
+        <td class="${m.type === 'income' ? 'green' : 'red'}" style="font-weight:bold;">
+          ${m.type === 'income' ? '+' : '-'}$${m.amount.toFixed(2)}
+        </td>
+      </tr>
+    `).join('');
+    $('movesTable').innerHTML = rows ? `<table><thead><tr><th>Fecha</th><th>Concepto</th><th>Categoría</th><th>Monto</th></tr></thead><tbody>${rows}</tbody></table>` : `<p class="muted" style="text-align:center; padding: 20px;">No hay registros aún.</p>`;
+  }
+
+  init();
+})();
+</script>
+</body>
+</html>
+```[cite: 1]
